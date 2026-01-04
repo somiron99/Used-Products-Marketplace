@@ -30,17 +30,15 @@ app.prepare().then(() => {
     },
   });
 
+  // Store io instance globally for API routes to use
+  global.io = io;
+
   io.on('connection', (socket) => {
     console.log('Client connected:', socket.id);
 
     socket.on('join-chat', (chatId) => {
       socket.join(chatId);
       console.log(`Socket ${socket.id} joined chat ${chatId}`);
-    });
-
-    socket.on('send-message', (data) => {
-      socket.to(data.chatId).emit('new-message', data.message);
-      console.log(`Message sent in chat ${data.chatId}`);
     });
 
     socket.on('disconnect', () => {
